@@ -1,0 +1,102 @@
+---
+created: <% tp.file.creation_date() %>
+tags: daily
+---
+# <% moment(tp.file.title,'YYYY-MM-DD').format("dddd") %>, [[<% moment(tp.file.title,'YYYY-MM-DD').format("MM-MMMM YYYY") %>|<% moment(tp.file.title,'YYYY-MM-DD').format("MMMM") %>]] <% moment(tp.file.title,'YYYY-MM-DD').format("DD") %>, [[<% moment(tp.file.title,'YYYY-MM-DD').format("YYYY") %>]]
+
+<< [[<% fileDate = moment(tp.file.title, 'YYYY-MM-DD-dddd').subtract(1, 'd').format('YYYY-MM-DD-dddd') %>|Previous Day]] | [[<% fileDate = moment(tp.file.title, 'YYYY-MM-DD-dddd').add(1, 'd').format('YYYY-MM-DD-dddd') %>|Next Day]] >>
+___
+## In the Sky
+#### [[Zodiac]]
+```dataview
+TABLE without ID
+file.link AS Sign, start AS Start, end AS End, Element, Planet
+FROM #zodiac 
+WHERE (start.month = <% fileDate = moment(tp.file.title, 'YYYY-MM-DD-dddd').subtract(1, 'M').format('MM') %> AND end.month = <% fileDate = moment(tp.file.title, 'YYYY-MM-DD-dddd').format('MM') %> AND end.day >= <% fileDate = moment(tp.file.title, 'YYYY-MM-DD-dddd').format('DD') %>) OR (start.month = <% fileDate = moment(tp.file.title, 'YYYY-MM-DD-dddd').format('MM') %> AND end.month = <% fileDate = moment(tp.file.title, 'YYYY-MM-DD-dddd').add(1, 'M').format('MM') %> AND start.day <= <% fileDate = moment(tp.file.title, 'YYYY-MM-DD-dddd').format('DD') %>)
+```
+#### [[Moon]]
+```dataview
+TASK
+WHERE (start = date(<% fileDate = moment(tp.file.title, 'YYYY-MM-DD-dddd').add(1, 'd').format('YYYY-MM-DD') %>) OR end = date(<% fileDate = moment(tp.file.title, 'YYYY-MM-DD-dddd').add(1, 'd').format('YYYY-MM-DD') %>)) OR (start <= date(<% fileDate = moment(tp.file.title, 'YYYY-MM-DD-dddd').add(1, 'd').format('YYYY-MM-DD') %>) AND end >= date(<% fileDate = moment(tp.file.title, 'YYYY-MM-DD-dddd').add(1, 'd').format('YYYY-MM-DD') %>)) AND contains(tags, "#moon") AND file.folder = "02 - Notes/Monthly Notes/<% fileDate = moment(tp.file.title, 'YYYY-MM-DD-dddd').format('YYYY') %>"
+```
+#### [[Planets]]
+```dataview
+TASK
+WHERE start = date(<% fileDate = moment(tp.file.title, 'YYYY-MM-DD-dddd').add(1, 'd').format('YYYY-MM-DD') %>) AND contains(tags, "#planets") AND file.folder = "02 - Notes/Monthly Notes/<% fileDate = moment(tp.file.title, 'YYYY-MM-DD-dddd').format('YYYY') %>"
+```
+___
+## 🎉 Birthdays
+```dataview
+TABLE without ID row.file.link AS Name, Birthday, truncate(string(date(today) - Birthday),2, "") AS Age
+FROM "People/People"
+WHERE Birthday.month = <% moment(tp.file.title,'YYYY-MM-DD-dddd').format("MM") %> AND Birthday.day = <% moment(tp.file.title,'YYYY-MM-DD-dddd').format("DD") %> 
+```
+___
+## 📅 Events & Holidays
+#### Today
+```dataview
+TASK
+WHERE (contains(tags, "#calendar") OR contains(tags, "#holiday")) AND scheduled = date(<% fileDate = moment(tp.file.title, 'YYYY-MM-DD-dddd').format('YYYY-MM-DD') %>)
+```
+#### Tomorrow
+```dataview
+TASK
+WHERE (contains(tags, "#calendar") OR contains(tags, "#holiday")) AND scheduled = date(<% fileDate = moment(tp.file.title, 'YYYY-MM-DD-dddd').add(1, 'd').format('YYYY-MM-DD') %>)
+```
+#### Next 7 Days
+```dataview
+TASK
+WHERE (contains(tags, "#calendar") OR contains(tags, "#holiday")) AND scheduled > date(<% fileDate = moment(tp.file.title, 'YYYY-MM-DD-dddd').add(1, 'd').format('YYYY-MM-DD') %>) AND scheduled <= date(<% fileDate = moment(tp.file.title, 'YYYY-MM-DD-dddd').add(7, 'd').format('YYYY-MM-DD') %>)
+SORT scheduled ASC
+```
+___
+## Today's Plan
+- [ ] 7:00 - 8:00 | Morning Routine
+	- [ ] [[<% fileDate = moment(tp.file.title, 'YYYY-MM-DD-dddd').subtract(1, 'd').format('YYYY-MM-DD-dddd') %>|Yesterday]]'s Daily Recap
+	- [ ] Review Tasks
+	- [ ] Today's Plan
+___
+## [[To Do|Tasks]]
+#### New Today
+
+#### Due Today
+```tasks
+not done
+(scheduled date is <%moment(tp.file.title,'YYYY-MM-DD').format("YYYY-MM-DD")%>) OR (scheduled before <%moment(tp.file.title,'YYYY-MM-DD').format("YYYY-MM-DD")%>)
+hide backlink
+hide task count
+```
+#### Can Do Today
+```tasks
+not done
+(no scheduled date) OR NOT (scheduled on <%moment(tp.file.title,'YYYY-MM-DD').format("YYYY-MM-DD")%>)
+path does not include Reminders/Cleaning
+filename does not include <%moment(tp.file.title,'YYYY-MM-DD').format("YYYY-MM-DD")%>
+hide created date
+hide backlink
+hide task count
+sort by scheduled date
+sort by filename reverse
+```
+#### Done Today
+```tasks
+done <%moment(tp.file.title,'YYYY-MM-DD').format("YYYY-MM-DD")%>
+is not recurring
+hide backlink
+hide done date
+hide task count
+```
+___
+## Daily Recap
+#### Some good things:
+- 
+#### Some Things to Think About:
+- 
+#### Productivity::
+#### Productivity Feeling:: 
+#### Overall Emotion:: 
+#### Outside:: 
+#### Weather:: 
+#### Temperature:: 
+___
+<< [[<% fileDate = moment(tp.file.title, 'YYYY-MM-DD-dddd').subtract(1, 'd').format('YYYY-MM-DD-dddd') %>|Previous Day]] | [[<% fileDate = moment(tp.file.title, 'YYYY-MM-DD-dddd').add(1, 'd').format('YYYY-MM-DD-dddd') %>|Next Day]] >>
