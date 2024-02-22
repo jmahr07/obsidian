@@ -43,11 +43,4 @@ ___
 #### Sources:
 
 
-## ✨ [[Magic]] ✨
-- 
-
-#### Element:: 
-#### Planet::
-
-#### Sources:
 
